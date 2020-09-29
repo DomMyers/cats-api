@@ -1,40 +1,37 @@
 import { 
-  Injectable, NotFoundException 
+  Injectable, 
+  NotFoundException,
 } from '@nestjs/common';
-import {
-  Cat
-} from './interfaces/cat.interface';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Cat } from './cat.entity';
+import { CreateCatDto } from './dto/CreateCat.dto';
 
 @Injectable()
 export class CatsService {
-  private readonly cats: Cat[] = [];
+  constructor(
+    @InjectRepository(Cat)
+    private catsRepository: Repository<Cat>
+  ) {}
 
-  create(cat: Cat) {
-    this.cats.push(cat);
+  create(createCatDto: CreateCatDto): Promise<Cat> {
+    const cat = new Cat();
+    cat.name = createCatDto.name;
+    cat.age = createCatDto.age;
+    cat.breed = createCatDto.breed;    
+
+    return this.catsRepository.save(cat);
   }
 
-  selectAll(): Cat[] {
-    return this.cats;
+  async findAll(): Promise<Cat[]> {
+    return this.catsRepository.find();
   }
 
-  // selectOne(id: number): Cat {
-  //   const cat = this.cats.find(c => c.id === id);
-    
-  //   if (!cat) {
-  //     throw new NotFoundException(`Could not find the cat with
-  //       the id: ${id}`);
-  //   }
+  findOne(id: string): Promise<Cat> {
+    return this.catsRepository.findOne(id);
+  }
 
-  //   return cat;
-  // }
-
-  selectByName(name: string): Cat[] {
-    const cats = this.cats.filter(c => c.name === name);
-
-    if (cats.length === 0) {
-      throw new NotFoundException(`Could not find any cats 
-      with the name ${name}.`)
-    }
-    return cats;
+  async remove(id: string): Promise<void> {
+    await this.catsRepository.delete(id);
   }
 }

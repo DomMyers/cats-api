@@ -8,6 +8,7 @@ import { logger } from './common/middleware/loggerFunction.middleware';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/user.entity';
 import { UsersModule } from './users/users.module';
+import { Cat } from './cats/cat.entity';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { UsersModule } from './users/users.module';
       username: 'postgres',
       password: 'password',
       database: 'test',
-      entities: [User],
+      entities: [User, Cat],
       synchronize: true,
       autoLoadEntities: true,
     }),

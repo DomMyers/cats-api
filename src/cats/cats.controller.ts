@@ -22,35 +22,22 @@ export class CatsController {
   ) {}
 
   @Post()
-  async create(@Body() createCatDto: CreateCatDto) {
-    this.catsService.create(createCatDto);
+  create(@Body() createCatDto: CreateCatDto): Promise<Cat> {
+    return this.catsService.create(createCatDto);
   }
 
   @Get()
-  async getAll(): Promise<Cat[]> {
-    return await this.catsService.selectAll();
+  findAll(): Promise<Cat[]> {
+    return this.catsService.findAll();
   }
 
-  // @Get('id')
-  // async getOne(@Param('id') id: number): Promise<Cat> {
-  //   return await this.catsService.selectOne(id);
-  // }
-
-  @Get(':name')
-  async getByName(@Param('name') name: string): Promise<Cat[]> {
-    return await this.catsService.selectByName(name);    
-  }
-
-  @Put(':id')
-  update(
-    @Param('id') id: string, 
-    @Body() updateCatDto: UpdateCatDto
-  ){
-    return `This action updates a #${id} cat`;
+  @Get(':id')
+  findOne(@Param('id') id: string): Promise<Cat> {
+    return this.catsService.findOne(id);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return `This action removes a #${id} cat`;
+  remove(@Param('id') id: string): Promise<void> {
+    return this.catsService.remove(id);
   }
 }
