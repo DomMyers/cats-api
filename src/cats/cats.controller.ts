@@ -6,7 +6,6 @@ import {
   Param, 
   Post, 
   Put, 
-  Query,
 } from '@nestjs/common';
 import { CatsService } from './cats.service';
 import {
@@ -28,19 +27,18 @@ export class CatsController {
   }
 
   @Get()
-  async findAll(): Promise<Cat[]> {
-    return this.catsService.findAll();
+  async getAll(): Promise<Cat[]> {
+    return await this.catsService.selectAll();
   }
 
-  @Get()
-  findAllByQuery(@Query() {limit}: ListAllEntitiesDto) {
-    return `This action returns all cats (limit: ${limit} items)`;
-  }
+  // @Get('id')
+  // async getOne(@Param('id') id: number): Promise<Cat> {
+  //   return await this.catsService.selectOne(id);
+  // }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    //return await this.catsService.getOne(+id);
-    return 'This action returns cat ' + id;
+  @Get(':name')
+  async getByName(@Param('name') name: string): Promise<Cat[]> {
+    return await this.catsService.selectByName(name);    
   }
 
   @Put(':id')

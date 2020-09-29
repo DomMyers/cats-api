@@ -5,9 +5,26 @@ import { CatsController } from './cats/cats.controller';
 import { CatsModule } from './cats/cats.module';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
 import { logger } from './common/middleware/loggerFunction.middleware';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './users/user.entity';
+import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [CatsModule],
+  imports: [
+    CatsModule,
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: 'localhost',
+      port: 5432,
+      username: 'root',
+      password: 'password',
+      database: 'test',
+      entities: [User],
+      synchronize: true,
+      autoLoadEntities: true,
+    }),
+    UsersModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
