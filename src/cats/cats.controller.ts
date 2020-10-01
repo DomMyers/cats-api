@@ -36,6 +36,11 @@ export class CatsController {
     return this.catsService.findOne(id);
   }
 
+  @Put()
+  update(@Body() updateCat: UpdateCatDto): Promise<void> {
+    return this.catsService.update(updateCat);
+  }
+
   @Delete(':id')
   remove(@Param('id') id: string): Promise<void> {
     return this.catsService.remove(id);

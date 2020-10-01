@@ -5,7 +5,10 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Cat } from './cat.entity';
-import { CreateCatDto } from './dto/CreateCat.dto';
+import { 
+  UpdateCatDto,
+  CreateCatDto 
+} from './dto';
 
 @Injectable()
 export class CatsService {
@@ -29,6 +32,16 @@ export class CatsService {
 
   findOne(id: string): Promise<Cat> {
     return this.catsRepository.findOne(id);
+  }
+
+  async update(updateCatDto: UpdateCatDto): Promise<void> {
+    const cat = await this.catsRepository.findOne(updateCatDto.id);
+
+    cat.name = updateCatDto.name;
+    cat.age = updateCatDto.age;
+    cat.breed = updateCatDto.breed;
+    
+    await this.catsRepository.save(cat);
   }
 
   async remove(id: string): Promise<void> {
